@@ -54,17 +54,23 @@ def _arrow3D(ax, x, y, z, dx, dy, dz, *args, **kwargs):
 
 setattr(Axes3D, 'arrow3D', _arrow3D)
 
+### to see the daily flight track of an individual please make this True
 full_track_control = False
+### shows the velocity compenents of birds in current thermal 
 do_plots = False
+### shows the corrected and original thermal
 do_corrected_thermals = False
+### shows the circles that froms teh thermal
 circles = False
 do_last_points = False
+# please make this True to see the full flight track with separeted gliding and thermal segments
 daily_plots = False
 
 interval1 = 5
 interval2 = 18
 ###C.ciconia interval 7-18
-
+###G.eremita interval 5-15
+###other birds 5-20
 
 bin_limit = 50
 
