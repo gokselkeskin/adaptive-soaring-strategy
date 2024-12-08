@@ -62,8 +62,9 @@ do_plots = False
 do_corrected_thermals = False
 ### shows the circles that froms teh thermal
 circles = False
+### shows differences between ground speed and estimated airspeed in a day
 do_last_points = False
-# please make this True to see the full flight track with separeted gliding and thermal segments
+### please make this True to see the full flight track with separeted gliding and thermal segments
 daily_plots = False
 
 interval1 = 5
@@ -72,16 +73,18 @@ interval2 = 18
 ###G.eremita interval 5-15
 ###other birds 5-20
 
+### adjust the min number of data points in 1m/s increment in horizontal speed 
 bin_limit = 50
 
+### minimum limit for defining thermals in seconds  
 defined_threshold = 30
 
 
 
 
-
+### add here publication dataset (one species)
 df_main = pd.read_csv(
-    r'C:\Users\36702\PycharmProjects\glidepolar\prepared_data\Ciconia ciconia_smooth_and_velocity_calculations_day_added.csv')
+    r'C:\Users\36702\PycharmProjects\glidepolar\prepared_data\Falco peregrinus_smooth_and_velocity_calculations.csv')
 
 df_main["date_in_unix_original"] = df_main["date_in_unix"]
 
