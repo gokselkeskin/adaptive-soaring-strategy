@@ -5,7 +5,7 @@ listofmodels  <-c(b_observed~x_best_glide_mean, b_observed~a_observed)
 
 for ( mymodel in listofmodels ){
   
-  output_file <- paste("Penny",all.vars(mymodel)[1], "_", all.vars(mymodel)[2], "_intercept.csv", sep="")
+  output_file <- paste(all.vars(mymodel)[1], "_", all.vars(mymodel)[2], "_intercept.csv", sep="")
   df <- read.csv("updated_results_30secs.csv")
   listoftrees <- ape::read.tree("pruned.tre", keep.multi=TRUE)
   ###############################################################################
