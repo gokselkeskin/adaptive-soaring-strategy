@@ -1,0 +1,34 @@
+
+library(phytools)
+library(ape)
+
+keep.tip.multiPhylo<-function(phy, list_of_tips, ...){
+  if(!inherits(phy,"multiPhylo"))
+    stop("phy is not an object of class \"multiPhylo\".")
+  else {
+    trees<-lapply(phy,keep.tip,tip=list_of_tips,...)
+    class(trees)<-"multiPhylo"
+  }
+  trees
+}
+
+myforest <- read.tree("AllBirdsEricson1.tre")
+species <- c("Falco_naumanni",
+             "Falco_peregrinus",
+             "Haliaeetus_leucocephalus",
+             "Aquila_nipalensis",
+             "Aquila_verreauxii",
+             "Aquila_rapax",
+             "Gyps_fulvus",
+             "Gyps_himalayensis",
+             "Gyps_rueppellii",
+             "Vultur_gryphus",
+             "Geronticus_eremita",
+             "Ciconia_ciconia")
+
+
+myprunedforest<-keep.tip.multiPhylo(myforest,species)
+
+write.tree(myprunedforest, 'pruned_tree.tre')
+
+
