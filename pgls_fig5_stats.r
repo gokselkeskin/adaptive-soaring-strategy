@@ -1,28 +1,28 @@
 library(ape)
 library(caper)
 
-listofmodels  <-c(xminsink~SQRTWL-1, xbestglide~SQRTWL-1, MeanRadius~WL-1, MeanRadius~MeanHorizontalSpeed-1)
+listofmodels  <-c(b_observed~x_best_glide_mean, b_observed~a_observed)
 
 for ( mymodel in listofmodels ){
   
-  output_file <- paste(all.vars(mymodel)[1], "_", all.vars(mymodel)[2], "_no_intercept.csv", sep="")
-  df <- read.csv("input.csv")
+  output_file <- paste("Penny",all.vars(mymodel)[1], "_", all.vars(mymodel)[2], "_intercept.csv", sep="")
+  df <- read.csv("updated_results_30secs.csv")
   listoftrees <- ape::read.tree("pruned.tre", keep.multi=TRUE)
   ###############################################################################
   
   results <- data.frame()
   
-  #for (i in 1:length(listoftrees)) {
-  for (i in 1:100) {
-    if (i == 133) next
-    print(i)
-    currenttree <- listoftrees[[i]]
+  for (i in 1:length(listoftrees)) {
+    #currenttree <- listoftrees[[i]]
+    # Rescale branch lengths using Grafen's method
+    currenttree <- compute.brlen(listoftrees[[i]], method = "Grafen")
+    
     dataTree <- comparative.data(
       phy=currenttree,             # the phylogeny
       data=df,             # the data frame
       names.col="Species", # names in the data frame that
       vcv=FALSE,           # whether to include a variance covariance array
-      warn.dropped=FALSE    # whether to warn when data 
+      warn.dropped=TRUE    # whether to warn when data 
       # or tips are dropped
     )
     # PGLS function
@@ -48,23 +48,22 @@ for ( mymodel in listofmodels ){
     
     # Extracting F-statistic and p-value
     f_stat <- summary(pgls1)$fstatistic
-    p_value <- summary(pgls1)$f.p.value
+    #p_value <- summary(pgls1)$f.p.value
     residual_std_error <-  summary(pgls1)$sigma
     f_value <- f_stat[1]
     #p_value_fstat <- 1 - pf(f_value, df1 = f_stat[2], df2 = f_stat[3])  # Calculating p-value
-
+    p_value <- 1 - pf(f_stat[1], f_stat[2], f_stat[3])
     
+    lambda_value <- summary(pgls1)$param["lambda"]
     # Combine all metrics
     result_row <- c(
       Tree = i,               # Tree index
-      Slope = coef_pgls[1],
-      Std_error_w = Std_error ,
-      t_value_w = t_value,
-      p_of_t_w = p_of_t,
-      rse = residual_std_error,
-      R_squared = r_squared
-      
-      #F_statistic = f_stat,
+      intercept = coef_pgls[1],
+      Slope = coef_pgls[2],
+      R_squared = r_squared,
+      F_statistic = f_value,
+      p_va = p_value,
+      Lambda = lambda_value
       #Slope = coef_pgls[2]
     )
     
